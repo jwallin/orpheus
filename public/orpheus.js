@@ -25,10 +25,18 @@
     return loadJSON('/send/' + device + '/' + key);
   };
 
+  var getButton = function(element) {
+    if (element.tagName.toLowerCase() === 'button') {
+      return element;
+    }
+    return element.parentElement && getButton(element.parentElement);
+  }
+
   document.querySelector('body').addEventListener('click', function(event) {
-    if (event.target.tagName.toLowerCase() === 'button') {
-      var device = event.target.dataset.device;
-      var key = event.target.dataset.key;
+    var button = getButton(event.target);
+    if (button) {
+      var device = button.dataset.device;
+      var key = button.dataset.key;
       sendCommand(device, key);
     }
   });
