@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <title>Orpheus</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <style type="text/css">
+      body {
+        margin: 1em 0;
+      }
+      .container .row {
+        margin-bottom:1em;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-default btn-lg btn-block" data-device="CU-SX092" data-key="KEY_CD">Spotify</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-default btn-lg btn-block" data-device="CU-SX092" data-key="phono">Vinyl</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="button" class="btn btn-default btn-lg btn-block" data-device="CU-SX092" data-key="KEY_TUNER">Radio</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-default btn-lg btn-block" data-device="CU-SX109" data-key="KEY_VOLUMEDOWN">
+            <span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="col-xs-6">
+          <button type="button" class="btn btn-default btn-lg btn-block" data-device="CU-SX109" data-key="KEY_VOLUMEUP">
+            <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    
+    <script>
+      (function() {
+        'use strict';
+
+        var loadJSON = function(url) {
+          return new Promise(function(resolve, reject) {
+            var req = new XMLHttpRequest();
+
+            req.onload = function() {
+              var err;
+
+              if (req.status != 200) {
+                reject(Error(req.statusText));
+                return;
+              }
+
+              resolve(req.responseText);
+            };
+
+            req.open('GET', url, true);
+            req.send();
+          });
+        };
+
+        var sendCommand = function(device, key) {
+          return loadJSON('/send/' + device + '/' + key);
+        };
+
+        document.querySelector('body').addEventListener('click', function(event) {
+          if (event.target.tagName.toLowerCase() === 'button') {
+            var device = event.target.dataset.device;
+            var key = event.target.dataset.key;
+            sendCommand(device, key);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
